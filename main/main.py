@@ -1,19 +1,26 @@
-from hashlib import blake2b
 import pygame
+
+from src.globals import WIN_WIDTH, WIN_HEIGHT
+from src.GraphUtil import Graph
+
 
 class Window():
     pygame.init()
     clock = pygame.time.Clock()
 
-    WIDTH=800
-    HEIGHT=600
+    WIDTH=WIN_WIDTH
+    HEIGHT=WIN_HEIGHT
     FPS = 30
     BKG_COLOR= (255,255,235)
 
     win = pygame.display.set_mode((WIDTH,HEIGHT))
 
     def __init__(self):
+        
+        self.graph = Graph()
+
         pygame.display.set_caption("3D Renderer")
+
 
     def update(self):
 
@@ -24,6 +31,7 @@ class Window():
 
     def render(self):
         self.win.fill(self.BKG_COLOR)
+        self.graph.render(self.win)
         pygame.display.flip()
 
     def start(self):
