@@ -1,7 +1,6 @@
 import pygame
-
 from src.globals import WIN_WIDTH, WIN_HEIGHT
-from src.GraphUtil import Graph
+from src.Scene import Scene
 
 
 class Window():
@@ -17,7 +16,7 @@ class Window():
 
     def __init__(self):
         
-        self.graph = Graph()
+        self.scene = Scene(self.win)
 
         pygame.display.set_caption("3D Renderer")
 
@@ -28,10 +27,11 @@ class Window():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
+        self.scene.update()
 
     def render(self):
         self.win.fill(self.BKG_COLOR)
-        self.graph.render(self.win)
+        self.scene.render()
         pygame.display.flip()
 
     def start(self):
