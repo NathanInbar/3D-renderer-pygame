@@ -1,4 +1,5 @@
 import pygame.gfxdraw
+from src.RenderPipeline import RenderPipeline
 from src.GraphUtil import Point
 from src.Generators import RandomColorGen
 
@@ -8,8 +9,8 @@ class Renderable():
 
 class Sphere(Renderable):
 
-    def __init__(self, position:Point, radius):
-        super().__init__()
+    def __init__(self, renderer:RenderPipeline, position:Point, radius):
+        super().__init__(renderer)
         self.position = position
         self.r = radius
 
