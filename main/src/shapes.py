@@ -13,6 +13,14 @@ class Sphere(Renderable):
         super().__init__(renderer)
         self.position = position
         self.r = radius
+        self.color = RandomColorGen.getNext()
+        self.renderer.push(self)
 
-    def render(self):
-        self.renderer.push(pygame.gfxdraw.filled_ellipse,self.position,self.r,self.r,RandomColorGen.getNext())
+    def update(self):
+        pass
+
+    def render(self, win, pos, depth):
+        #pos, depth = self.renderer.wp_to_sp(self.position)
+        print(pos)
+        print(depth)
+        pygame.gfxdraw.filled_ellipse(win,pos.x,pos.y,depth,depth, self.color)

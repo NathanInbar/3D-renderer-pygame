@@ -1,40 +1,28 @@
-from cmath import tan
-from typing import Tuple
-import pygame
-import pygame.gfxdraw
+from math import tan
 from src.globals import WIN_WIDTH, WIN_HEIGHT, FOV
 from src.GraphUtil import Point
-import heapq
 
 class RenderPipeline():
 
-    def __init__(self, win, scene, camera):
+    def __init__(self, win, camera):
         self.win = win
         self.render_queue = []
-        self.scene = scene
         self.cam = camera
 
-    def push(self, renderFunc, pos:Point, size:Tuple[int,int], *args ):
-        '''push a render request onto the queue after adjusting for perspective'''
-
-        pos, depth = self._wp_to_sp(pos)
-
-
-        #NOTE i think i will need to make my own priority queue where priority = max depth
-        heapq.heappush(self.render_queue,(renderFunc,(self.win,pos.x,pos.y,depth,depth,*args)))
+    def push(self,obj):
+        '''push a renderable object onto the queue'''
+        self.render_queue.append(obj)
 
     def render(self):
         '''execute all queued render instructions on the heap'''
-        while len(self.render_queue) != 0:
-            ex = heapq.heappop()
-            #execute render instruction
-            ex[0](ex[1][0],ex[1][1],ex[1][2],ex[1][3],ex[1][4],ex[1][5])
-            
+        for _r in self.render_queue:
+            _r.render(self.win, *self.wp_to_sp(_r.position))           
 
-    def _wp_to_sp(self, wp:Point)->Point:
+    def wp_to_sp(self, wp:Point)->Point:
         '''finds screen point relative to camera perspective'''
-        # center the point and then displace it to screen position, where x = x, y = -z
-        (x,y,z) = wp.get()
+        # center the point and then project it to screen position
+        x,y,z = wp.get()
+        z += 0.1 #for division by zero avoidance
         a = WIN_WIDTH/WIN_HEIGHT #aspect ratio
         f = 1 / tan(FOV/2) # x,y scaling factor
         zNear = self.cam.zNear
@@ -43,11 +31,4 @@ class RenderPipeline():
 
         #<x,y,z,1> -> projection matrix -> <afx, fy, zq-znearq, z>
         #then x,y coord = <afx/z, afy/z> , size scales by zq-znearq
-        return Point(a*f*x/z, f*y/z), z*q-zNear*q #coordinates with applied transformation matrix, z to be used as size scalar
-
-    def _scale_with_depth(self, size:Tuple[int,int], depth)->Tuple[int,int]:
-
-        if depth >= self.CULL_DISTANCE:
-            return (None,None)
-
-        return (size[0]/depth,size[1]/depth)
+        return Point(a*f*x/z, f*y/z,z*q-zNear*q) #coordinates with applied transformation matrix, z to be used as size scalar

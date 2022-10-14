@@ -1,9 +1,6 @@
-from src.GraphUtil import Point, Vector3, Transform
-
 class Camera():
 
-    def __init__(self, transform:Transform):
-        self.transform = transform
+    def __init__(self):
         self.zNear = 0.1 #near distance from viewing frustrum
         self.zFar = 1000 #far distance from viewing frustrum
 

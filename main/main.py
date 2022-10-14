@@ -2,22 +2,15 @@ import pygame
 from src.globals import WIN_WIDTH, WIN_HEIGHT
 from src.Scene import Scene
 
-
 class Window():
     pygame.init()
     clock = pygame.time.Clock()
+    BKG_COLOR = (255,255,235)
 
-    WIDTH=WIN_WIDTH
-    HEIGHT=WIN_HEIGHT
-    FPS = 30
-    BKG_COLOR= (255,255,235)
-
-    win = pygame.display.set_mode((WIDTH,HEIGHT))
+    win = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
 
     def __init__(self):
-        
         self.scene = Scene(self.win)
-
         pygame.display.set_caption("3D Renderer")
 
 
