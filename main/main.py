@@ -1,6 +1,7 @@
 import pygame
 from src.globals import WIN_WIDTH, WIN_HEIGHT
 from src.Scene import Scene
+from src.GraphUtil import Point
 
 class Window():
     pygame.init()
@@ -20,6 +21,19 @@ class Window():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
+            if event.type == pygame.KEYDOWN:
+                if event.key == ord('w'):
+                    self.scene.objects[0].position += Point(0,0.25,0) #the cube face is not facing camera, wrong orientation whoopsie
+                elif event.key == ord('s'):
+                    self.scene.objects[0].position += Point(0,-0.25,0)
+                elif event.key == ord('a'):
+                    self.scene.objects[0].position += Point(0.25,0,0)
+                elif event.key == ord('d'):
+                    self.scene.objects[0].position += Point(-0.25,0,0)
+                elif event.key == ord('q'):
+                    self.scene.objects[0].position += Point(0,0,-0.25)
+                elif event.key == ord('e'):
+                    self.scene.objects[0].position += Point(0,0,0.25)
         self.scene.update()
 
     def render(self):

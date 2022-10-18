@@ -22,6 +22,7 @@ class RenderPipeline():
         '''finds screen point relative to camera perspective'''
         # center the point and then project it to screen position
         x,y,z = wp.get()
+        z+=3 #z-offset
         z += 0.1 #for division by zero avoidance
         a = WIN_WIDTH/WIN_HEIGHT #aspect ratio
         f = 1 / tan(FOV/2) # x,y scaling factor
@@ -31,4 +32,7 @@ class RenderPipeline():
 
         #<x,y,z,1> -> projection matrix -> <afx, fy, zq-znearq, z>
         #then x,y coord = <afx/z, afy/z> , size scales by zq-znearq
-        return Point(a*f*x/z, f*y/z,z*q-zNear*q) #coordinates with applied transformation matrix, z to be used as size scalar
+        sx = ((a*f*x/z +1.0)*0.5*WIN_WIDTH)
+        sy = ((f*y/z +1.0)*0.5*WIN_HEIGHT)
+        depth = z*q-zNear*q
+        return Point(round(sx),round(sy)),round(depth)#coordinates with applied transformation matrix, z to be used as size scalar

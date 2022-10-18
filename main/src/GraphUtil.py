@@ -2,7 +2,7 @@ from math import sqrt
 from typing import TypeVar
 
 #UNIT_SCALAR = int(WIN_HEIGHT/10)
-
+TPoint = TypeVar("TPoint", bound="Point")
 class Point():
 
     def __init__(self, x=0, y=0, z=0):
@@ -12,6 +12,9 @@ class Point():
 
     def get(self):
         return self.x,self.y,self.z
+
+    def __add__(self, p2:TPoint):
+        return Point(self.x+p2.x, self.y+p2.y, self.z+p2.z)
 
     def __str__(self):
         return f"({self.x}, {self.y}, {self.z})"
@@ -33,6 +36,8 @@ class Vector3():
         return Vector3(-self.x,-self.y,-self.z)
     def Add(self, v2:TVector3)->TVector3:
         return Vector3(self.x+v2.x,self.y+v2.y,self.z+v2.z)
+    def __add__(self, v2:TVector3)->TVector3:
+        return self.Add(v2)
     def Subtract(self, v2:TVector3)->TVector3:
         return self.Add(v2.Negate())
     def Multiply(self, v2:TVector3)->TVector3:
